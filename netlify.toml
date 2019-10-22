@@ -1,6 +1,6 @@
 [build]
   base = "csbw-mud/"
-  publish = "csbw-mud/build/"
+  publish = "build/"
 
   # A basic redirect rule
   # For use with react router. Keeps user from leaving index.html when
