@@ -1,39 +1,55 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Login = () => {
   const [loginState, setLoginState] = useState({ username: '', password: '' });
-  const [value, setValue] = useState('');
+  // const [value, setValue] = useState('');
 
   const loginChange = e => {
     setLoginState({
       ...loginState,
+      [e.target.name]: e.target.value,
     });
   };
 
-  console.log('USER:', user);
-  console.log('VALUE:', value);
+  console.log('USER:', loginState);
+  // console.log('VALUE:', value);
 
-  const handleSubmit = e => {
+  // const handleSubmit = e => {
+  //   e.preventDefault();
+  //   setUser([...user, value]);
+  //   setValue('');
+  // };
+
+  const handleLogin = e => {
     e.preventDefault();
-    setUser([...user, value]);
-    setValue('');
+    axios
+      .post('https://lambda-mud-test.herokuapp.com/api/login', loginState)
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
     <div className='login-wrapper'>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleLogin}>
         <div className='input-fields'>
           <input
-            onChange={e => setValue(e.target.value)}
-            name='Username'
-            value={value}
+            onChange={loginChange}
+            name='username'
+            placeholder='username'
+            value={loginState.username}
           />
           <input
-            onChange={e => setValue(e.target.value)}
-            name='Password'
-            value={value}
+            onChange={loginChange}
+            placeholder='password'
+            name='password'
+            value={loginState.password}
           />
-          <button></button>
+          <button type='submit'>Log in</button>
         </div>
       </form>
     </div>
