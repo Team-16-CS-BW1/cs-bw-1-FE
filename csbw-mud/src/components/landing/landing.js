@@ -1,11 +1,12 @@
 import React from 'react';
+import Login from './Login';
 
-const landing = () => {
+const Landing = () => {
   return (
-    <div>
-      <p>landing page</p>
+    <div className='landing-page'>
+      <Login />
     </div>
   );
 };
 
-export default landing;
+export default Landing;
