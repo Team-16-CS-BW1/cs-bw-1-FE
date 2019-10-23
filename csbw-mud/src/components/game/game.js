@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const Game = props => {
+const Game = () => {
   const [userData, setUserData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,6 +46,7 @@ const Game = props => {
       {/* We can render individual Game components from here
         maps, movement, room info, etc. from another main
         component */}
+      <button onClick={localStorage.removeItem("token")}>Logout</button>
       <p>Game info</p>
       {/* <Map /> */}
     </div>
