@@ -46,7 +46,11 @@ const Login = props => {
   const handleLogin = e => {
     e.preventDefault();
     axios
-      .post("https://lambda-mud-test.herokuapp.com/api/login/", loginState)
+      .post(
+        // "https://lambda-mud-test.herokuapp.com/api/login/",
+        "https://t-16-mud.herokuapp.com/api/login/",
+        loginState
+      )
       .then(res => {
         localStorage.setItem("token", res.data.key);
         // props.setLoginState(true);
@@ -63,7 +67,8 @@ const Login = props => {
     e.preventDefault();
     axios
       .post(
-        "https://lambda-mud-test.herokuapp.com/api/registration/",
+        // "https://lambda-mud-test.herokuapp.com/api/registration/",
+        "https://t-16-mud.herokuapp.com/api/registration/",
         registerState
       )
       .then(res => {

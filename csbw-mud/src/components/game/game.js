@@ -15,7 +15,7 @@ const Game = () => {
     //     let response = await
     setIsLoading(true);
     axios
-      .get("https://lambda-mud-test.herokuapp.com/api/adv/init/", {
+      .get("https://t-16-mud.herokuapp.com/api/adv/init/", {
         headers: {
           Authorization: `Token ${current_user_token}`
         }
