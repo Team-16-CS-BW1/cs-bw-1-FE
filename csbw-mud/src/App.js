@@ -4,10 +4,10 @@ import Landing from './components/landing/Landing';
 
 function App() {
   return (
-    <div className='App'>
-      <header className='App-header'>
+    <div className='main-wrapper-app'>
+      <div className='component-wrapper'>
         <Landing />
-      </header>
+      </div>
     </div>
   );
 }

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Login = props => {
-  // LOGIN HOOK
+  // LOGIN STATE
   const [loginState, setLoginState] = useState({ username: '', password: '' });
 
-  // REGISTER HOOK
+  // REGISTER STATE
   const [registerState, setRegisterState] = useState({
     username: '',
     password1: '',
