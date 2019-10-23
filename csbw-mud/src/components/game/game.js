@@ -12,7 +12,7 @@ const Game = () => {
     // const fetchData = async () => {
     // if (localStorage.getItem('token')) {
     //   try {
-    //     let response = awai
+    //     let response = awa
     setIsLoading(true);
     axios
       .get('https://t-16-mud.herokuapp.com/api/adv/init/', {
