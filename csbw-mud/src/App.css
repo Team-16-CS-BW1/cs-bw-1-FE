@@ -20,3 +20,72 @@
 .App-link {
   color: #09d3ac;
 }
+
+form {
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+}
+.input-fields {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.field {
+  width: 100%;
+  height: 50px;
+  padding: 0px 16px;
+  border: 1px solid black;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+  margin-top: 20px;
+  box-shadow: 0px 4px 20px 0px transparent;
+}
+
+.custom-button {
+  box-shadow: 0px 10px 14px -7px #276873;
+  background: linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+  background-color: #599bb3;
+  border-radius: 8px;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 13px 32px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #3d768a;
+  margin-top: 2rem;
+}
+.custom-button:hover {
+  background: linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+  background-color: #408c99;
+}
+.custom-button:active {
+  position: relative;
+  top: 1px;
+}
+
+.custom-button2 {
+  width: 15%;
+  box-shadow: 0px 10px 14px -7px #276873;
+  background-color: black;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Arial;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 13px 32px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #3d768a;
+  margin-top: 2rem;
+}

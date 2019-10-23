@@ -1,13 +1,14 @@
 import React from 'react';
 import './App.css';
-import Landing from './components/landing/landing';
+import Main from './landing/Main';
+import Game from './game/Game';
 
 function App() {
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <Landing />
-      </header>
+    <div className='main-wrapper-app'>
+      <div className='component-wrapper'>
+        {localStorage.getItem('token') ? <Game /> : <Main />}
+      </div>
     </div>
   );
 }
