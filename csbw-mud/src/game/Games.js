@@ -108,11 +108,25 @@ class Games extends React.Component {
     return this.setState({ currentRoom: currentRoomArr });
   }
 
+  loadMove() {
+    let newCurrentRoomArr = [];
+
+    // console.log('inside load user', this.props.userData.current_room);
+    let x = this.props.moveData.current_room.x;
+    let y = this.props.moveData.current_room.y;
+    newCurrentRoomArr.push({ x, y });
+
+    // let x = room.x;
+    // let y = room.y;
+
+    return this.setState({ currentRoom: newCurrentRoomArr });
+  }
+
   loadCells() {
     let cellsArr = [];
 
     this.props.roomData.map(room => {
-      // console.log('inside cdm', room.x);
+      console.log('CDM FIRED_________________>>>');
       let x = room.x;
       let y = room.y;
       cellsArr.push({ x, y });
@@ -137,11 +151,16 @@ class Games extends React.Component {
     const { cells, neighbors, currentRoom } = this.state;
     // console.log('GAMES props', this.props.roomData);
     // console.log('GAMES userdata:', this.props.userData.world_map.rooms[0]);
-    if (this.props.roomData.length && this.props.userData.length != 0) {
-      console.log('games ROOMDATA', this.props.roomData);
-      console.log('games USERDATA', this.props.userData);
+    if (
+      this.props.roomData.length &&
+      this.props.userData.length &&
+      this.props.moveData.length != 0
+    ) {
+      console.log('games ROOMDATA___', this.props.roomData);
+      console.log('games USERDATA___', this.props.userData);
+      console.log('games moveData___', this.props.moveData);
       // console.log('games props', this.props.roomData[0].x);
-      console.log('cells STATE', this.state.currentRoom);
+      console.log('cells STATE___', this.state.currentRoom);
     }
     return (
       <div>
@@ -151,28 +170,36 @@ class Games extends React.Component {
             onClick={e => {
               this.props.move(e, 'n');
               // if (this.props.userData.currentRoom.id == )
-              this.loadUser();
+              setTimeout(() => {
+                this.loadMove();
+              }, 250);
             }}>
             Move North
           </button>
           <button
             onClick={e => {
               this.props.move(e, 's');
-              this.loadUser();
+              setTimeout(() => {
+                this.loadMove();
+              }, 250);
             }}>
             Move South
           </button>
           <button
             onClick={e => {
               this.props.move(e, 'e');
-              this.loadUser();
+              setTimeout(() => {
+                this.loadMove();
+              }, 250);
             }}>
             Move East
           </button>
           <button
             onClick={e => {
               this.props.move(e, 'w');
-              this.loadUser();
+              setTimeout(() => {
+                this.loadMove();
+              }, 250);
             }}>
             Move West
           </button>

@@ -8,6 +8,7 @@ import Games from './Games';
 const Game = () => {
   const [userData, setUserData] = useState({});
   const [roomData, setRoomData] = useState([]);
+  const [moveData, setMoveData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const players = userData.players;
   const current_user_token = localStorage.token;
@@ -55,7 +56,7 @@ const Game = () => {
         },
       )
       .then(res => {
-        setUserData(res.data);
+        setMoveData(res.data);
         setIsLoading(false);
         console.log('Move Response', res.data);
       })
@@ -77,9 +78,14 @@ const Game = () => {
         <p>Loading...</p>
       ) : (
         <div>
-          <Room userData={userData} />
+          <Room userData={userData} moveData={moveData} />
           {/* <Navigation move={move} /> */}
-          <Games roomData={roomData} userData={userData} move={move} />
+          <Games
+            roomData={roomData}
+            userData={userData}
+            move={move}
+            moveData={moveData}
+          />
         </div>
       )}
       {/* 
