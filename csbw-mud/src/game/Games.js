@@ -72,35 +72,48 @@ class Games extends React.Component {
     return cells;
   }
 
-  handleClick = event => {
-    const elemOffset = this.getElementOffset();
-    const offsetX = event.clientX - elemOffset.x;
-    const offsetY = event.clientY - elemOffset.y;
+  // handleClick = event => {
+  //   const elemOffset = this.getElementOffset();
+  //   const offsetX = event.clientX - elemOffset.x;
+  //   const offsetY = event.clientY - elemOffset.y;
 
-    const x = Math.floor(offsetX / CELL_SIZE);
-    const y = Math.floor(offsetY / CELL_SIZE);
+  //   const x = Math.floor(offsetX / CELL_SIZE);
+  //   const y = Math.floor(offsetY / CELL_SIZE);
 
-    if (x >= 0 && x <= this.cols && y >= 0 && y <= this.rows) {
-      this.board[y][x] = !this.board[y][x];
+  //   if (x >= 0 && x <= this.cols && y >= 0 && y <= this.rows) {
+  //     this.board[y][x] = !this.board[y][x];
+  //   }
+
+  //   this.setState({ cells: this.makeCells() });
+  // };
+
+  loadCells() {
+    let cellsArr = [];
+
+    this.props.roomData.map(room => {
+      console.log('inside cdm', room.x);
+      let x = room.x;
+      let y = room.y;
+      cellsArr.push({ x, y });
+    });
+    return this.setState({ cells: cellsArr });
+  }
+
+  componentDidMount() {
+    if (this.props.roomData.length != 0) {
+      this.loadCells();
     }
-
-    this.setState({ cells: this.makeCells() });
-  };
-
-  // componentDidMount() {
-  //   this.props.roomData.map(room => {
-  //     let cellsArr = [];
-  //     // console.log(room.x);
-  //     room.x = x;
-  //     room.y = y;
-  //     cellsArr.push({ x, y });
-  //     this.setState({ cells: cellsArr });
-  //   });
-  // }
+  }
 
   render() {
     const { cells, interval, isRunning } = this.state;
-    console.log('GAMES props', this.props.roomData[0]['x']);
+    // console.log('GAMES props', this.props.roomData);
+    // console.log('GAMES userdata:', this.props.userData.world_map.rooms[0]);
+    if (this.props.roomData.length != 0) {
+      console.log('games full props', this.props.roomData);
+      console.log('games props', this.props.roomData[0].x);
+      console.log('cells STATE', this.state.cells);
+    }
     return (
       <div>
         <div

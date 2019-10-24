@@ -37,7 +37,7 @@ const Game = () => {
       });
   }, []);
 
-  console.log('userdata:', userData);
+  // console.log('userdata:', userData.world_map.rooms[0]);
   console.log('roomdata:', roomData);
   // console.log('roomdata:', roomData[1].id);
   // console.log('roomdata:', roomData[1]['id'][1]);
@@ -73,13 +73,13 @@ const Game = () => {
         maps, movement, room info, etc. from another main
         component */}
       {/* <button onClick={localStorage.removeItem("token")}>Logout</button> */}
-      {isLoading ? (
+      {isLoading && roomData.length != 0 ? (
         <p>Loading...</p>
       ) : (
         <div>
           <Room userData={userData} />
           <Navigation move={move} />
-          <Games roomData={roomData} />
+          <Games roomData={roomData} userData={userData} />
         </div>
       )}
       {/* 
