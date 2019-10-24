@@ -1,4 +1,5 @@
 import React from 'react';
+import Navigation from './Navigation';
 
 const CELL_SIZE = 54;
 const WIDTH = 810;
@@ -7,9 +8,28 @@ const HEIGHT = 810;
 class Cell extends React.Component {
   render() {
     const { x, y } = this.props;
+    // console.log('cell state props', this.props.currentRoom);
     return (
       <div
         className='Cell'
+        style={{
+          left: `${CELL_SIZE * x + 1}px`,
+          top: `${CELL_SIZE * y + 1}px`,
+          width: `${CELL_SIZE - 1}px`,
+          height: `${CELL_SIZE - 1}px`,
+        }}
+      />
+    );
+  }
+}
+
+class Currentcell extends React.Component {
+  render() {
+    const { x, y } = this.props;
+    // console.log('cell state props', this.props.currentRoom);
+    return (
+      <div
+        className='Current-cell'
         style={{
           left: `${CELL_SIZE * x + 1}px`,
           top: `${CELL_SIZE * y + 1}px`,
@@ -32,9 +52,9 @@ class Games extends React.Component {
 
   state = {
     cells: [{ x: 0, y: 3 }, { x: 0, y: 0 }],
-    isRunning: false,
-    interval: 100,
     rooms: [],
+    neighbors: [{ x: 0, y: 0 }],
+    currentRoom: [],
   };
 
   makeEmptyBoard() {
@@ -72,26 +92,25 @@ class Games extends React.Component {
     return cells;
   }
 
-  // handleClick = event => {
-  //   const elemOffset = this.getElementOffset();
-  //   const offsetX = event.clientX - elemOffset.x;
-  //   const offsetY = event.clientY - elemOffset.y;
+  loadUser() {
+    let currentRoomArr = [];
 
-  //   const x = Math.floor(offsetX / CELL_SIZE);
-  //   const y = Math.floor(offsetY / CELL_SIZE);
+    // console.log('inside load user', this.props.userData.current_room);
+    let x = this.props.userData.current_room.x;
+    let y = this.props.userData.current_room.y;
+    currentRoomArr.push({ x, y });
 
-  //   if (x >= 0 && x <= this.cols && y >= 0 && y <= this.rows) {
-  //     this.board[y][x] = !this.board[y][x];
-  //   }
+    // let x = room.x;
+    // let y = room.y;
 
-  //   this.setState({ cells: this.makeCells() });
-  // };
+    return this.setState({ currentRoom: currentRoomArr });
+  }
 
   loadCells() {
     let cellsArr = [];
 
     this.props.roomData.map(room => {
-      console.log('inside cdm', room.x);
+      // console.log('inside cdm', room.x);
       let x = room.x;
       let y = room.y;
       cellsArr.push({ x, y });
@@ -100,22 +119,62 @@ class Games extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.roomData.length != 0) {
+    if (this.props.roomData.length && this.props.userData.length != 0) {
       this.loadCells();
+      this.loadUser();
     }
   }
 
+  // componentDidUpdate() {
+  //   // if (this.props.userData.current_room != 0) {
+  //   // this.loadUser();
+  //   // }
+  // }
+
   render() {
-    const { cells, interval, isRunning } = this.state;
+    const { cells, neighbors, currentRoom } = this.state;
     // console.log('GAMES props', this.props.roomData);
     // console.log('GAMES userdata:', this.props.userData.world_map.rooms[0]);
-    if (this.props.roomData.length != 0) {
-      console.log('games full props', this.props.roomData);
-      console.log('games props', this.props.roomData[0].x);
-      console.log('cells STATE', this.state.cells);
+    if (this.props.roomData.length && this.props.userData.length != 0) {
+      console.log('games ROOMDATA', this.props.roomData);
+      console.log('games USERDATA', this.props.userData);
+      // console.log('games props', this.props.roomData[0].x);
+      console.log('cells STATE', this.state.currentRoom);
     }
     return (
       <div>
+        <div className='main-wrapper-app'>
+          <h2>Navigation</h2>
+          <button
+            onClick={e => {
+              this.props.move(e, 'n');
+              // if (this.props.userData.currentRoom.id == )
+              this.loadUser();
+            }}>
+            Move North
+          </button>
+          <button
+            onClick={e => {
+              this.props.move(e, 's');
+              this.loadUser();
+            }}>
+            Move South
+          </button>
+          <button
+            onClick={e => {
+              this.props.move(e, 'e');
+              this.loadUser();
+            }}>
+            Move East
+          </button>
+          <button
+            onClick={e => {
+              this.props.move(e, 'w');
+              this.loadUser();
+            }}>
+            Move West
+          </button>
+        </div>
         <div
           className='Board'
           style={{
@@ -123,41 +182,21 @@ class Games extends React.Component {
             height: HEIGHT,
             backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px`,
           }}>
-          {/* {/* // onClick={this.handleClick}
-          // ref={n => { 
-          //   this.boardRef = n;
-          // }} */}
-          {/* if cell.x === room.x && cell.y === room.y {
-            <Cell 
-          } */}
           {cells.map(cell => (
+            <Cell
+              x={cell.x}
+              y={cell.y}
+              key={`${cell.x},${cell.y}`}
+              currentRoom={currentRoom}
+            />
+          ))}
+          {/* {neighbors.map(cell => (
             <Cell x={cell.x} y={cell.y} key={`${cell.x},${cell.y}`} />
+          ))} */}
+          {currentRoom.map(cell => (
+            <Currentcell x={cell.x} y={cell.y} key={`${cell.x},${cell.y}`} />
           ))}
         </div>
-
-        {/* <div className="controls">
-          Update every{" "}
-          <input
-            value={this.state.interval}
-            onChange={this.handleIntervalChange}
-          />{" "}
-          msec
-          {isRunning ? (
-            <button className="button" onClick={this.stopGame}>
-              Stop
-            </button>
-          ) : (
-            <button className="button" onClick={this.runGame}>
-              Run
-            </button>
-          )}
-          <button className="button" onClick={this.handleRandom}>
-            Random
-          </button>
-          <button className="button" onClick={this.handleClear}>
-            Clear
-          </button>
-        </div> */}
       </div>
     );
   }

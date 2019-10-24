@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const Room = props => {
   //   const players = props.userData.players;
@@ -6,7 +6,7 @@ const Room = props => {
   //   const playersList = players.map(player => {
   //     return player;
   //   });
-  console.log("players", players);
+  //   console.log("players", players);
   return (
     <div>
       <p>{title}</p>

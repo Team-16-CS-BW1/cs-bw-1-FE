@@ -103,6 +103,11 @@ form {
   position: absolute;
 }
 
+.Current-cell {
+  background: blue;
+  position: absolute;
+}
+
 .controls {
   margin-top: 20px;
 }

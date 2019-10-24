@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Map from './Map';
-import Navigation from './Navigation';
+// import Map from './Map';
+// import Navigation from './Navigation';
 import Room from './Room';
 import Games from './Games';
 
@@ -11,7 +11,7 @@ const Game = () => {
   const [isLoading, setIsLoading] = useState(false);
   const players = userData.players;
   const current_user_token = localStorage.token;
-  console.log('token var:', current_user_token);
+  // console.log('token var:', current_user_token);
 
   const headers = {
     Authorization: `Token ${current_user_token}`,
@@ -38,7 +38,7 @@ const Game = () => {
   }, []);
 
   // console.log('userdata:', userData.world_map.rooms[0]);
-  console.log('roomdata:', roomData);
+  // console.log('roomdata:', roomData);
   // console.log('roomdata:', roomData[1].id);
   // console.log('roomdata:', roomData[1]['id'][1]);
 
@@ -78,8 +78,8 @@ const Game = () => {
       ) : (
         <div>
           <Room userData={userData} />
-          <Navigation move={move} />
-          <Games roomData={roomData} userData={userData} />
+          {/* <Navigation move={move} /> */}
+          <Games roomData={roomData} userData={userData} move={move} />
         </div>
       )}
       {/* 
