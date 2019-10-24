@@ -3,9 +3,11 @@ import axios from "axios";
 import Map from "./Map";
 import Navigation from "./Navigation";
 import Room from "./Room";
+import Games from "./Games";
 
 const Game = () => {
   const [userData, setUserData] = useState({});
+  const [rooms, setRooms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const players = userData.players;
   const current_user_token = localStorage.token;
@@ -81,7 +83,8 @@ const Game = () => {
       {/* <button onClick={localStorage.removeItem("token")}>Logout</button> */}
       <Room userData={userData} />
       <Navigation move={move} />
-      <Map />
+      {/* <Map /> */}
+      <Games />
     </div>
   );
 };
