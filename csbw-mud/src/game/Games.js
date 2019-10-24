@@ -19,6 +19,8 @@ class Cell extends React.Component {
           height: `${CELL_SIZE - 1}px`,
         }}
       />
+      //   <p>{this.props.userData.currentRoom.id}</p>
+      // </div>
     );
   }
 }
@@ -26,7 +28,7 @@ class Cell extends React.Component {
 class Currentcell extends React.Component {
   render() {
     const { x, y } = this.props;
-    // console.log('cell state props', this.props.currentRoom);
+    console.log('CURRENT CELL from props', { x, y });
     return (
       <div
         className='Current-cell'
@@ -187,14 +189,19 @@ class Games extends React.Component {
               x={cell.x}
               y={cell.y}
               key={`${cell.x},${cell.y}`}
-              currentRoom={currentRoom}
+              // currentRoom={currentRoom}
             />
           ))}
           {/* {neighbors.map(cell => (
             <Cell x={cell.x} y={cell.y} key={`${cell.x},${cell.y}`} />
           ))} */}
           {currentRoom.map(cell => (
-            <Currentcell x={cell.x} y={cell.y} key={`${cell.x},${cell.y}`} />
+            <Currentcell
+              x={cell.x}
+              y={cell.y}
+              key={`${cell.x},${cell.y}`}
+              // userData={this.props.userData}
+            />
           ))}
         </div>
       </div>
