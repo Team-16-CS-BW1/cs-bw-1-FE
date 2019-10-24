@@ -1,90 +1,92 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Map from "./Map";
-import Navigation from "./Navigation";
-import Room from "./Room";
-import Games from "./Games";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Map from './Map';
+import Navigation from './Navigation';
+import Room from './Room';
+import Games from './Games';
 
 const Game = () => {
   const [userData, setUserData] = useState({});
-  const [rooms, setRooms] = useState([]);
+  const [roomData, setRoomData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const players = userData.players;
   const current_user_token = localStorage.token;
-  console.log("token var:", current_user_token);
+  console.log('token var:', current_user_token);
 
   const headers = {
-    Authorization: `Token ${current_user_token}`
+    Authorization: `Token ${current_user_token}`,
   };
 
   useEffect(() => {
-    // const fetchData = async () => {
-    // if (localStorage.getItem('token')) {
-    //   try {
-    //     let response = aw
     setIsLoading(true);
     axios
-      .get("https://t-16-mud.herokuapp.com/api/adv/init/", {
+      .get('https://t-16-mud.herokuapp.com/api/adv/init/', {
         headers: {
-          Authorization: `Token ${current_user_token}`
-        }
+          Authorization: `Token ${current_user_token}`,
+        },
       })
-      // console.log('res var:', res);
-      // setUserData(res.data);
-      // console.log('REGISTER DATA', res.data);
       .then(res => {
         setUserData(res.data);
+        setRoomData(res.data.world_map.rooms);
         setIsLoading(false);
-        console.log("REGISTER DATA", res.data);
+        console.log('REGISTER DATA', res.data);
       })
-      // .catch(err => {
-      //   console.log(err);
-      // });
-      // }
       .catch(err => {
-        console.log("CATCH from TRY", err);
+        console.log('CATCH from TRY', err);
         setIsLoading(false);
       });
   }, []);
-  // fetchData();
-  // current_user_token, userData
 
-  console.log("userdata:", userData);
+  console.log('userdata:', userData);
+  console.log('roomdata:', roomData);
+  // console.log('roomdata:', roomData[1].id);
+  // console.log('roomdata:', roomData[1]['id'][1]);
 
   const move = (e, direction) => {
     e.preventDefault();
     axios
       .post(
-        "https://t-16-mud.herokuapp.com/api/adv/move/",
+        'https://t-16-mud.herokuapp.com/api/adv/move/',
         {
-          direction: direction
+          direction: direction,
         },
         {
-          headers: headers
-        }
+          headers: headers,
+        },
       )
       .then(res => {
         setUserData(res.data);
         setIsLoading(false);
-        console.log("Move Response", res.data);
+        console.log('Move Response', res.data);
       })
 
       .catch(err => {
-        console.log("CATCH from move", err);
+        console.log('CATCH from move', err);
         setIsLoading(false);
       });
   };
 
   return (
     <div>
+      {/* {isLoading ? false : console.log('hello', roomData[0].id)} */}
       {/* We can render individual Game components from here
         maps, movement, room info, etc. from another main
         component */}
       {/* <button onClick={localStorage.removeItem("token")}>Logout</button> */}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <Room userData={userData} />
+          <Navigation move={move} />
+          <Games roomData={roomData} />
+        </div>
+      )}
+      {/* 
       <Room userData={userData} />
-      <Navigation move={move} />
+      <Navigation move={move} /> */}
       {/* <Map /> */}
-      <Games />
+      {/* <Games roomData={roomData} /> */}
     </div>
   );
 };
