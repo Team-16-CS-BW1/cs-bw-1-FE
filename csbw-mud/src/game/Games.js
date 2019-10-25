@@ -3,6 +3,10 @@ import Navigation from "./Navigation";
 import axios from "axios";
 import Room from "./Room";
 import styled from "styled-components";
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 const CELL_SIZE = 54;
 const WIDTH = 810;
@@ -272,7 +276,8 @@ class Games extends React.Component {
         <NavWrapper>
           <h2>Navigation</h2>
           <ButtonContainer>
-            <button
+            <ArrowUpwardIcon
+              fontSize="large"
               onClick={e => {
                 this.move(e, "n");
                 // this.setState({ navFlag: true });
@@ -281,42 +286,40 @@ class Games extends React.Component {
                   this.loadMove();
                 }, 500);
               }}
-            >
-              Move North
-            </button>
-            <button
+            />
+            <ArrowDownwardIcon
+              fontSize="large"
               onClick={e => {
                 this.move(e, "s");
                 // this.setState({ navFlag: true });
+                // if (this.props.userData.currentRoom.id == )
                 setTimeout(() => {
                   this.loadMove();
                 }, 500);
               }}
-            >
-              Move South
-            </button>
-            <button
+            />
+            <ArrowForwardIcon
+              fontSize="large"
               onClick={e => {
                 this.move(e, "e");
                 // this.setState({ navFlag: true });
+                // if (this.props.userData.currentRoom.id == )
                 setTimeout(() => {
                   this.loadMove();
                 }, 500);
               }}
-            >
-              Move East
-            </button>
-            <button
+            />
+            <ArrowBackIcon
+              fontSize="large"
               onClick={e => {
                 this.move(e, "w");
                 // this.setState({ navFlag: true });
+                // if (this.props.userData.currentRoom.id == )
                 setTimeout(() => {
                   this.loadMove();
                 }, 500);
               }}
-            >
-              Move West
-            </button>
+            />
           </ButtonContainer>
         </NavWrapper>
         <div
