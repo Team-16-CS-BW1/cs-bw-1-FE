@@ -116,3 +116,8 @@ form {
   margin-left: 12px;
   cursor: pointer;
 }
+
+.room-wrapper {
+  width: 600px;
+  height: 200px;
+}

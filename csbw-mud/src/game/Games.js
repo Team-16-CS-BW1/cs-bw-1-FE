@@ -1,5 +1,7 @@
 import React from 'react';
 import Navigation from './Navigation';
+import axios from 'axios';
+import Room from './Room';
 
 const CELL_SIZE = 54;
 const WIDTH = 810;
@@ -43,6 +45,11 @@ class Currentcell extends React.Component {
   }
 }
 
+const current_user_token = localStorage.token;
+const headers = {
+  Authorization: `Token ${current_user_token}`,
+};
+
 class Games extends React.Component {
   constructor() {
     super();
@@ -56,7 +63,10 @@ class Games extends React.Component {
     cells: [{ x: 0, y: 3 }, { x: 0, y: 0 }],
     rooms: [],
     neighbors: [{ x: 0, y: 0 }],
-    currentRoom: [{}],
+    currentRoom: [],
+    navFlag: false,
+    moveData: {},
+    isLoading: false,
   };
 
   makeEmptyBoard() {
@@ -97,7 +107,7 @@ class Games extends React.Component {
   loadUser() {
     let currentRoomArr = [];
 
-    // console.log('inside load user', this.props.userData.current_room);
+    console.log('inside load user', this.props.userData.current_room);
     let x = this.props.userData.current_room.x;
     let y = this.props.userData.current_room.y;
     currentRoomArr.push({ x, y });
@@ -110,11 +120,17 @@ class Games extends React.Component {
 
   loadMove() {
     let newCurrentRoomArr = [];
+    // this.setState({ navFlag: false });
+    // console.log('inside load user', this.props.userData.current_room);
+    // console.log('LOADMOVE', this.props.moveData.current_room);
+    // console.log('inside load user', this.state.userData.current_room);
+    // console.log('LOADMOVE', this.state.moveData.current_room);
 
-    console.log('inside load user', this.props.userData.current_room);
-    console.log('LOADMOVE', this.props.moveData.current_room);
-    let x = this.props.moveData.current_room.x;
-    let y = this.props.moveData.current_room.y;
+    let x = this.state.moveData.current_room.x;
+    let y = this.state.moveData.current_room.y;
+
+    // let x = this.props.moveData.current_room.x;
+    // let y = this.props.moveData.current_room.y;
     newCurrentRoomArr.push({ x, y });
 
     // let x = room.x;
@@ -142,75 +158,126 @@ class Games extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.moveData.length !== 0) {
-      if (
-        this.state.currentRoom !== prevState.currentRoom &&
-        prevState.currentRoom.length !== 0
-        // this.props.userData.current_room.id !== this.state.currentRoom.id
-        // this.state.currentRoom !== prevState.currentRoom &&
-        // this.props.moveData.current_room.length !== 0
-        // this.props.userData.current_room.y !== prevState.currentRoom.y
-      ) {
-        this.loadMove();
-      }
-    }
-  }
+  // shouldComponentUpdate(nextProps){
+  //   thenewroom = this.state.current
+  // }
+
+  //  CDU is not passing to fire LOADMOVE so the state is not getting updated to change cell COORDS
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (
+  //     this.state.navFlag === true
+  //     // prevProps.moveData.title !== this.props.moveData.title
+  //   ) {
+  //     this.setState({ navFlag: false });
+  //     this.loadMove();
+  //   }
+  // }
+  //   if (this.props.moveData) {
+  //     if (
+  //       this.state.currentRoom !== prevState.currentRoom &&
+  //       prevState.currentRoom.length !== 0
+  //       // this.props.userData.current_room.id !== this.state.currentRoom.id
+  //       // this.state.currentRoom !== prevState.currentRoom &&
+  //       // this.props.moveData.current_room.length !== 0
+  //       // this.props.userData.current_room.y !== prevState.currentRoom.y
+  //     ) {
+  //       this.loadMove();
+  //     }
+  //   }
+  // }
+
+  move = async (e, direction) => {
+    e.preventDefault();
+    this.setState({ isLoading: true });
+    axios
+      .post(
+        'https://t-16-mud.herokuapp.com/api/adv/move/',
+        {
+          direction: direction,
+        },
+        {
+          headers: headers,
+        },
+      )
+      .then(res => {
+        this.setState({ moveData: res.data });
+        // this.setState({ navFlag: true });
+        this.setState({ isLoading: false });
+        console.log('Move Response', res.data);
+      })
+
+      .catch(err => {
+        this.setState({ isLoading: false });
+        console.log('CATCH from move', err);
+      });
+  };
 
   render() {
     const { cells, neighbors, currentRoom } = this.state;
     // console.log('GAMES props', this.props.roomData);
     // console.log('GAMES userdata:', this.props.userData.world_map.rooms[0]);
-    if (
-      this.props.roomData.length &&
-      this.props.userData.length &&
-      this.props.moveData.length != 0
-    ) {
-      console.log('games ROOMDATA___', this.props.roomData);
-      console.log('games USERDATA___', this.props.userData);
-      console.log('games moveData___', this.props.moveData);
-      // console.log('games props', this.props.roomData[0].x);
-      console.log('cells STATE___', this.state.currentRoom);
-    }
+    // if (
+    //   this.props.roomData.length &&
+    //   this.props.userData.length &&
+    //   this.props.moveData.length != 0
+    // ) {
+    //   console.log('games ROOMDATA___', this.props.roomData);
+    //   console.log('games USERDATA___', this.props.userData);
+    //   console.log('games moveData___', this.props.moveData);
+    //   // console.log('games props', this.props.roomData[0].x);
+    //   console.log('cells STATE___', this.state.currentRoom);
+    //   console.log('moveData in GAMES______>>', this.props.moveData.length);
+    // }
+
+    // console.log('BIG BRAIN NAV FLAG____', this.state.navFlag);
 
     return (
       <div>
+        {this.state.isLoading ? (
+          <p>Is loading...</p>
+        ) : (
+          <Room moveData={this.state.moveData} />
+        )}
         <div className='main-wrapper-app'>
           <h2>Navigation</h2>
           <button
             onClick={e => {
-              this.props.move(e, 'n');
+              this.move(e, 'n');
+              // this.setState({ navFlag: true });
               // if (this.props.userData.currentRoom.id == )
-              // setTimeout(() => {
-              //   this.loadMove();
-              // }, 550);
+              setTimeout(() => {
+                this.loadMove();
+              }, 500);
             }}>
             Move North
           </button>
           <button
             onClick={e => {
-              this.props.move(e, 's');
-              // setTimeout(() => {
-              //   this.loadMove();
-              // }, 550);
+              this.move(e, 's');
+              // this.setState({ navFlag: true });
+              setTimeout(() => {
+                this.loadMove();
+              }, 500);
             }}>
             Move South
           </button>
           <button
             onClick={e => {
-              this.props.move(e, 'e');
-              // setTimeout(() => {
-              //   this.loadMove();
-              // }, 550);
+              this.move(e, 'e');
+              // this.setState({ navFlag: true });
+              setTimeout(() => {
+                this.loadMove();
+              }, 500);
             }}>
             Move East
           </button>
           <button
             onClick={e => {
-              this.props.move(e, 'w');
-              // setTimeout(() => {
-              //   this.loadMove();
-              // }, 550);
+              this.move(e, 'w');
+              // this.setState({ navFlag: true });
+              setTimeout(() => {
+                this.loadMove();
+              }, 500);
             }}>
             Move West
           </button>
