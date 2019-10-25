@@ -1,28 +1,63 @@
-import React from 'react';
-import Navigation from './Navigation';
-import axios from 'axios';
-import Room from './Room';
+import React from "react";
+import Navigation from "./Navigation";
+import axios from "axios";
+import Room from "./Room";
+import styled from "styled-components";
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import ArrowForwardIcon from "@material-ui/icons/ArrowForward";
 
 const CELL_SIZE = 54;
 const WIDTH = 810;
 const HEIGHT = 810;
 
 class Cell extends React.Component {
+  static getDerivedStateFromProps(props, state) {
+    if (props.someProp !== state.someProp) {
+      return { someProp: props.someProp };
+    }
+    return null;
+  }
+  constructor({ someProp }) {
+    super();
+    this.state = { someProp };
+  }
   render() {
-    const { x, y } = this.props;
-    // console.log('cell state props', this.props.currentRoom);
+    const { x, y, currentRoomX } = this.props;
+    let currentX;
+    let currentY;
+    if (currentRoomX.length > 0) {
+      console.log("Single Cell state props", currentRoomX[0]);
+      currentX = currentRoomX[0].x;
+      currentY = currentRoomX[0].y;
+    }
+    console.log("CELL current x:", currentX);
+    console.log("CELL current Y:", currentY);
     return (
-      <div
-        className='Cell'
-        style={{
-          left: `${CELL_SIZE * x + 1}px`,
-          top: `${CELL_SIZE * y + 1}px`,
-          width: `${CELL_SIZE - 1}px`,
-          height: `${CELL_SIZE - 1}px`,
-        }}
-      />
-      //   <p>{this.props.userData.currentRoom.id}</p>
-      // </div>
+      <>
+        {currentX == x && currentY == y ? (
+          <div
+            className="CurrentCell"
+            style={{
+              left: `${CELL_SIZE * x + 1}px`,
+              top: `${CELL_SIZE * y + 1}px`,
+              width: `${CELL_SIZE - 1}px`,
+              height: `${CELL_SIZE - 1}px`
+            }}
+          />
+        ) : (
+          <div
+            className="Cell"
+            style={{
+              left: `${CELL_SIZE * x + 1}px`,
+              top: `${CELL_SIZE * y + 1}px`,
+              width: `${CELL_SIZE - 1}px`,
+              height: `${CELL_SIZE - 1}px`
+            }}
+          />
+        )}
+      </>
     );
   }
 }
@@ -30,15 +65,15 @@ class Cell extends React.Component {
 class Currentcell extends React.Component {
   render() {
     const { x, y } = this.props;
-    console.log('CURRENT CELL from props', { x, y });
+    console.log("CURRENT CELL from props", { x, y });
     return (
       <div
-        className='Current-cell'
+        className="Current-cell"
         style={{
           left: `${CELL_SIZE * x + 1}px`,
           top: `${CELL_SIZE * y + 1}px`,
           width: `${CELL_SIZE - 1}px`,
-          height: `${CELL_SIZE - 1}px`,
+          height: `${CELL_SIZE - 1}px`
         }}
       />
     );
@@ -47,7 +82,7 @@ class Currentcell extends React.Component {
 
 const current_user_token = localStorage.token;
 const headers = {
-  Authorization: `Token ${current_user_token}`,
+  Authorization: `Token ${current_user_token}`
 };
 
 class Games extends React.Component {
@@ -66,7 +101,7 @@ class Games extends React.Component {
     currentRoom: [],
     navFlag: false,
     moveData: {},
-    isLoading: false,
+    isLoading: false
   };
 
   makeEmptyBoard() {
@@ -87,7 +122,7 @@ class Games extends React.Component {
 
     return {
       x: rect.left + window.pageXOffset - doc.clientLeft,
-      y: rect.top + window.pageYOffset - doc.clientTop,
+      y: rect.top + window.pageYOffset - doc.clientTop
     };
   }
 
@@ -107,7 +142,7 @@ class Games extends React.Component {
   loadUser() {
     let currentRoomArr = [];
 
-    console.log('inside load user', this.props.userData.current_room);
+    console.log("inside load user", this.props.userData.current_room);
     let x = this.props.userData.current_room.x;
     let y = this.props.userData.current_room.y;
     currentRoomArr.push({ x, y });
@@ -143,7 +178,7 @@ class Games extends React.Component {
     let cellsArr = [];
 
     this.props.roomData.map(room => {
-      console.log('CDM FIRED_________________>>>');
+      console.log("CDM FIRED_________________>>>");
       let x = room.x;
       let y = room.y;
       cellsArr.push({ x, y });
@@ -191,24 +226,24 @@ class Games extends React.Component {
     this.setState({ isLoading: true });
     axios
       .post(
-        'https://t-16-mud.herokuapp.com/api/adv/move/',
+        "https://t-16-mud.herokuapp.com/api/adv/move/",
         {
-          direction: direction,
+          direction: direction
         },
         {
-          headers: headers,
-        },
+          headers: headers
+        }
       )
       .then(res => {
         this.setState({ moveData: res.data });
         // this.setState({ navFlag: true });
         this.setState({ isLoading: false });
-        console.log('Move Response', res.data);
+        console.log("Move Response", res.data);
       })
 
       .catch(err => {
         this.setState({ isLoading: false });
-        console.log('CATCH from move', err);
+        console.log("CATCH from move", err);
       });
   };
 
@@ -238,80 +273,101 @@ class Games extends React.Component {
         ) : (
           <Room moveData={this.state.moveData} />
         )}
-        <div className='main-wrapper-app'>
+        <NavWrapper>
           <h2>Navigation</h2>
-          <button
-            onClick={e => {
-              this.move(e, 'n');
-              // this.setState({ navFlag: true });
-              // if (this.props.userData.currentRoom.id == )
-              setTimeout(() => {
-                this.loadMove();
-              }, 500);
-            }}>
-            Move North
-          </button>
-          <button
-            onClick={e => {
-              this.move(e, 's');
-              // this.setState({ navFlag: true });
-              setTimeout(() => {
-                this.loadMove();
-              }, 500);
-            }}>
-            Move South
-          </button>
-          <button
-            onClick={e => {
-              this.move(e, 'e');
-              // this.setState({ navFlag: true });
-              setTimeout(() => {
-                this.loadMove();
-              }, 500);
-            }}>
-            Move East
-          </button>
-          <button
-            onClick={e => {
-              this.move(e, 'w');
-              // this.setState({ navFlag: true });
-              setTimeout(() => {
-                this.loadMove();
-              }, 500);
-            }}>
-            Move West
-          </button>
-        </div>
+          <ButtonContainer>
+            <ArrowUpwardIcon
+              fontSize="large"
+              onClick={e => {
+                this.move(e, "n");
+                // this.setState({ navFlag: true });
+                // if (this.props.userData.currentRoom.id == )
+                setTimeout(() => {
+                  this.loadMove();
+                }, 500);
+              }}
+            />
+            <ArrowDownwardIcon
+              fontSize="large"
+              onClick={e => {
+                this.move(e, "s");
+                // this.setState({ navFlag: true });
+                // if (this.props.userData.currentRoom.id == )
+                setTimeout(() => {
+                  this.loadMove();
+                }, 500);
+              }}
+            />
+            <ArrowForwardIcon
+              fontSize="large"
+              onClick={e => {
+                this.move(e, "e");
+                // this.setState({ navFlag: true });
+                // if (this.props.userData.currentRoom.id == )
+                setTimeout(() => {
+                  this.loadMove();
+                }, 500);
+              }}
+            />
+            <ArrowBackIcon
+              fontSize="large"
+              onClick={e => {
+                this.move(e, "w");
+                // this.setState({ navFlag: true });
+                // if (this.props.userData.currentRoom.id == )
+                setTimeout(() => {
+                  this.loadMove();
+                }, 500);
+              }}
+            />
+          </ButtonContainer>
+        </NavWrapper>
         <div
-          className='Board'
+          className="Board"
           style={{
             width: WIDTH,
             height: HEIGHT,
-            backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px`,
-          }}>
+            backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px`
+          }}
+        >
           {cells.map(cell => (
             <Cell
               x={cell.x}
               y={cell.y}
               key={`${cell.x},${cell.y}`}
-              // currentRoom={currentRoom}
+              currentRoomX={this.state.currentRoom}
             />
           ))}
-          {/* {neighbors.map(cell => (
-            <Cell x={cell.x} y={cell.y} key={`${cell.x},${cell.y}`} />
-          ))} */}
-          {currentRoom.map(cell => (
+          {/* {currentRoom.map(cell => (
             <Currentcell
               x={cell.x}
               y={cell.y}
               key={`${cell.x},${cell.y}`}
               // userData={this.props.userData}
             />
-          ))}
+          ))} */}
         </div>
       </div>
     );
   }
 }
+
+const NavWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
+  margin: 0 auto;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 80%;
+  margin: 0 auto;
+  align-items: center;
+`;
 
 export default Games;
