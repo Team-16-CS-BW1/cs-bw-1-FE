@@ -1,0 +1,12 @@
+[build]
+  base = "csbw-mud/"
+  publish = "build/"
+
+  # A basic redirect rule
+  # For use with react router. Keeps user from leaving index.html when
+  # refreshing or pasting different routes into the browser.
+  [[redirects]]
+    from = "/*"
+    to = "/index.html"
+    # must add the status code so that redirects will work. W
+    status = 200
